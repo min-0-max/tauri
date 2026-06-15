@@ -4012,11 +4012,11 @@ fn handle_user_message<T: UserEvent>(
             {
               use wry::WebViewExtMacOS;
               f(Webview {
-                webview: Retained::into_raw(webview.webview()) as *mut objc2::runtime::AnyObject
+                webview: Retained::as_ptr(&webview.webview()) as *mut objc2::runtime::AnyObject
                   as *mut std::ffi::c_void,
-                manager: Retained::into_raw(webview.manager()) as *mut objc2::runtime::AnyObject
+                manager: Retained::as_ptr(&webview.manager()) as *mut objc2::runtime::AnyObject
                   as *mut std::ffi::c_void,
-                ns_window: Retained::into_raw(webview.ns_window()) as *mut objc2::runtime::AnyObject
+                ns_window: Retained::as_ptr(&webview.ns_window()) as *mut objc2::runtime::AnyObject
                   as *mut std::ffi::c_void,
               });
             }
@@ -4025,10 +4025,10 @@ fn handle_user_message<T: UserEvent>(
               use wry::WebViewExtIOS;
 
               f(Webview {
-                webview: Retained::into_raw(webview.inner.webview())
+                webview: Retained::as_ptr(&webview.inner.webview())
                   as *mut objc2::runtime::AnyObject
                   as *mut std::ffi::c_void,
-                manager: Retained::into_raw(webview.inner.manager())
+                manager: Retained::as_ptr(&webview.inner.manager())
                   as *mut objc2::runtime::AnyObject
                   as *mut std::ffi::c_void,
                 view_controller: window.ui_view_controller(),
