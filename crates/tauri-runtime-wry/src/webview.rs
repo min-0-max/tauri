@@ -18,10 +18,14 @@ mod imp {
   use std::ffi::c_void;
 
   pub struct Webview {
-    pub webview: *mut c_void,
-    pub manager: *mut c_void,
+    // Borrowed ObjC handles; the `with_webview` closure only reads them for the
+    // duration of the call, so `*const` reflects the real (immutable) access and
+    // avoids the `&T`-through-`*const T`-to-`*mut T` cast smell.
+    pub webview: *const c_void,
+    pub manager: *const c_void,
     #[cfg(target_os = "macos")]
-    pub ns_window: *mut c_void,
+    pub ns_window: *const c_void,
+    // Not a borrowed Retained handle (comes from the window), kept as `*mut`.
     #[cfg(target_os = "ios")]
     pub view_controller: *mut c_void,
   }

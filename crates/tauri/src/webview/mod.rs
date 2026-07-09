@@ -198,7 +198,9 @@ impl PlatformWebview {
   #[cfg(any(target_os = "macos", target_os = "ios"))]
   #[cfg_attr(docsrs, doc(cfg(any(target_os = "macos", target_os = "ios"))))]
   pub fn inner(&self) -> *mut std::ffi::c_void {
-    self.0.webview
+    // Stored as `*const` (borrowed handle); the caller receives a mutable handle
+    // to drive the WKWebView, so the const→mut cast lives here at the boundary.
+    self.0.webview.cast_mut()
   }
 
   /// Returns WKWebView [controller] handle.
@@ -207,7 +209,7 @@ impl PlatformWebview {
   #[cfg(any(target_os = "macos", target_os = "ios"))]
   #[cfg_attr(docsrs, doc(cfg(any(target_os = "macos", target_os = "ios"))))]
   pub fn controller(&self) -> *mut std::ffi::c_void {
-    self.0.manager
+    self.0.manager.cast_mut()
   }
 
   /// Returns [NSWindow] associated with the WKWebView webview.
@@ -216,7 +218,7 @@ impl PlatformWebview {
   #[cfg(target_os = "macos")]
   #[cfg_attr(docsrs, doc(cfg(target_os = "macos")))]
   pub fn ns_window(&self) -> *mut std::ffi::c_void {
-    self.0.ns_window
+    self.0.ns_window.cast_mut()
   }
 
   /// Returns [UIViewController] used by the WKWebView webview NSWindow.
